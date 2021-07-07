@@ -31,4 +31,16 @@ int main() {
     // and range -2^63 to 2^63-1
     double double_number = 2.56789;
     cout << "double number value is: " << double_number << endl;
+    // NOTE: default value of double is garbage
+    
+   // double provides more precision after decimal
+   // float precision upto 7 digits after decimal
+   // double precision upto 15 digits after decimal
+
+    // storing scientific numbers
+    double speed_of_light_ms = 3e8;
+    double planck_constant = 6.26e-34;
+
+    cout << "speed of light (m/s): " << speed_of_light_ms << endl;
+    cout << "plancks constant: " << planck_constant << endl;
 }
