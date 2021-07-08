@@ -33,9 +33,9 @@ int main() {
     cout << "double number value is: " << double_number << endl;
     // NOTE: default value of double is garbage
     
-   // double provides more precision after decimal
-   // float precision upto 7 digits after decimal
-   // double precision upto 15 digits after decimal
+    // double provides more precision after decimal
+    // float precision upto 7 digits after decimal
+    // double precision upto 15 digits after decimal
 
     // storing scientific numbers
     double speed_of_light_ms = 3e8;
@@ -43,4 +43,19 @@ int main() {
 
     cout << "speed of light (m/s): " << speed_of_light_ms << endl;
     cout << "plancks constant: " << planck_constant << endl;
+
+    // char data type stores 1 byte of memory
+    // range -2^7 to 2^7-1
+    // It denotes a single character from ASCII and is only
+    // within single quotes
+
+    char mycharacter = 'S';
+    cout << "mycharacter value is: " << mycharacter << endl;
+
+    // bool data type stores 1 byte of memory
+    // but restricted to store only true or false which
+    // can also be denoted using 1 or 0
+
+    bool is_learning = true;
+    cout << "is_learning value is: " << is_learning << endl;
 }
