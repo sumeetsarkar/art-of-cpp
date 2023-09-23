@@ -2,25 +2,52 @@
 #include <cstdlib>
 #include <iostream>
 
+using namespace std;
+
 int main(int argc, char **argv) {
-  std::cout << "arrays" << std::endl;
+  cout << "arrays" << endl;
 
-  std::array<int32_t, 6> arr = {9, 10, 20, 30, 40, 50};
+  array<int32_t, 6> arr = {9, 10, 20, 30, 40, 50};
   for (int32_t i = 0; i < arr.size(); i++)
-    std::cout << i << ": " << arr[i] << ", " << arr.at(i) << std::endl;
+    cout << i << ": " << arr[i] << ", " << arr.at(i) << endl;
 
-  std::cout << "maxsize: " << arr.max_size() << std::endl;
-  std::cout << "empty: " << arr.empty() << std::endl;
+  cout << "maxsize: " << arr.max_size() << endl;
+  cout << "empty: " << arr.empty() << endl;
 
-  std::cout << "begin: " << arr.begin() << ", value: " << *arr.begin()
-            << std::endl;
-  std::cout << "end: " << arr.end() - 1 << ", value: " << *(arr.end() - 1)
-            << std::endl;
+  cout << "front: " << arr.front() << endl;
+  cout << "back: " << arr.back() << endl;
+
+  cout << "begin: " << arr.begin() << ", value: " << *arr.begin() << endl;
+  cout << "end: " << arr.end() - 1 << ", value: " << *(arr.end() - 1) << endl;
 
   for (auto i = arr.begin(); i != arr.end(); i++)
-    std::cout << i << ": " << *i << std::endl;
+    cout << i << ": " << *i << endl;
 
-  arr.at(10); //  uncaught exception of type std::out_of_range: array::at
+  cout << "fill array\n";
+  arr.fill(0);
+
+  for (auto i = arr.begin(); i != arr.end(); i++)
+    cout << i << ": " << *i << endl;
+
+  array<int32_t, 6> arr2 = {9, 10, 20, 30, 40, 50};
+  arr2.swap(arr);
+
+  for (auto i = arr.begin(); i != arr.end(); i++)
+    cout << i << ": " << *i << endl;
+
+  cout << "arr2\n";
+  for (auto i = arr2.begin(); i != arr2.end(); i++)
+    cout << i << ": " << *i << endl;
+
+  array<int32_t, 10> arr3;
+  arr3[0] = 1;
+  arr3[1] = 2;
+  cout << "arr3 size: " << arr3.size() << endl;
+  cout << "arr3 maxsize: " << arr3.max_size() << endl;
+  cout << "arr3: " << arr3[0] << ", " << arr3[1] << endl;
+  cout << "arr3: " << arr3[9] << endl;
+
+  arr3.at(10);  //  uncaught exception of type out_of_range: array::at
 
   return EXIT_SUCCESS;
 }
