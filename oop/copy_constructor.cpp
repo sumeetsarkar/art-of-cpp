@@ -17,6 +17,7 @@ class String {
   }
 
   String(const String &other) {
+    std::cout << ">> copy constructor\n";
     this->size = other.size;
     this->buffer = new char[this->size + 1];
     std::memcpy(this->buffer, other.buffer, this->size);
@@ -39,6 +40,10 @@ std::ostream &operator<<(std::ostream &stream, const String &string) {
   return stream;
 }
 
+void print_copy_values(String str) { std::cout << str << std::endl; }
+
+void print_copy_reference(const String &str) { std::cout << str << std::endl; }
+
 int main(int argc, char **argv) {
   String str1 = "test string";
   String str2 = str1;
@@ -49,5 +54,8 @@ int main(int argc, char **argv) {
   str2[0] = 'b';
   std::cout << str1 << std::endl;
   std::cout << str2 << std::endl;
+
+  print_copy_values(str2);
+  print_copy_reference(str2);
   return EXIT_SUCCESS;
 }
