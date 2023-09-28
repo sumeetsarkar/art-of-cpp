@@ -1,11 +1,13 @@
 #include <assert.h>
 
+#include <algorithm>
 #include <cstdlib>
 #include <fstream>
 #include <ios>
 #include <iostream>
 #include <locale>
 #include <unordered_map>
+#include <vector>
 
 static std::string ltrim(std::string &s) {
   s.erase(s.begin(), std::find_if(s.begin(), s.end(),
@@ -93,11 +95,16 @@ bool FileConfigManager::load() {
 bool FileConfigManager::save() {
   bool present_before_load = this->is_file_present();
   std::ofstream fout;
+  std::vector<std::string> keys;
+
   fout.open(this->get_path(), std::ios_base::trunc);
   for (auto kv : this->kv_map) {
-    std::string key = kv.first;
-    std::string value = kv.second;
-    fout << key << this->delimiter << value << std::endl;
+    keys.push_back(kv.first);
+  }
+  std::sort(keys.begin(), keys.end());
+  for (auto k : keys) {
+    std::string value = this->kv_map[k];
+    fout << k << this->delimiter << value << std::endl;
   }
   fout.close();
   return !present_before_load;
