@@ -1,11 +1,7 @@
-#include <assert.h>
-
-#include <algorithm>
-#include <cstdlib>
+#include <cassert>
 #include <fstream>
 #include <ios>
 #include <iostream>
-#include <locale>
 #include <unordered_map>
 #include <vector>
 
@@ -30,7 +26,7 @@ class FileConfigManager {
   bool is_file_present();
 
  public:
-  FileConfigManager(std::string dir, std::string filename) {
+  FileConfigManager(const std::string &dir, const std::string &filename) {
     assert(is_not_empty(dir));
     assert(is_not_empty(filename));
     this->dir = dir;
@@ -38,8 +34,9 @@ class FileConfigManager {
     this->delimiter = '=';
   }
 
-  FileConfigManager(std::string dir, std::string filename, char delimiter)
-      : dir(dir), filename(filename) {
+  FileConfigManager(std::string dir, std::string filename,
+                    const char &delimiter)
+      : dir(std::move(dir)), filename(std::move(filename)) {
     this->delimiter = delimiter;
   }
 
@@ -47,10 +44,10 @@ class FileConfigManager {
   void dump();
   bool load();
   bool save();
-  std::string get(std::string key);
-  std::string get(std::string key, std::string default_value);
-  void put(std::string key, std::string value);
-  bool remove(std::string key);
+  std::string get(const std::string &key);
+  std::string get(const std::string &key, const std::string &default_value);
+  void put(const std::string &key, const std::string &value);
+  bool remove(const std::string &key);
   void extract(std::unordered_map<std::string, std::string> &map);
 };
 
@@ -74,15 +71,15 @@ bool FileConfigManager::load() {
   while (std::getline(fin, line)) {
     std::string key, value;
     int delimiter_found = 0;
-    for (int32_t i = 0; i < line.length(); i++) {
-      if (line[i] == this->delimiter) {
+    for (const char i : line) {
+      if (i == this->delimiter) {
         delimiter_found += 1;
         continue;
       }
       if (delimiter_found == 0)
-        key += line[i];
+        key += i;
       else if (delimiter_found == 1)
-        value += line[i];
+        value += i;
       else
         break;
     }
@@ -98,11 +95,12 @@ bool FileConfigManager::save() {
   std::vector<std::string> keys;
 
   fout.open(this->get_path(), std::ios_base::trunc);
-  for (auto kv : this->kv_map) {
+  keys.reserve(this->kv_map.size());
+  for (const auto &kv : this->kv_map) {
     keys.push_back(kv.first);
   }
   std::sort(keys.begin(), keys.end());
-  for (auto k : keys) {
+  for (const auto &k : keys) {
     std::string value = this->kv_map[k];
     fout << k << this->delimiter << value << std::endl;
   }
@@ -115,32 +113,34 @@ void FileConfigManager::dump() {
   std::cout << "filename: " << this->filename << std::endl;
   std::cout << "full path: " << this->get_path() << std::endl;
   std::cout << "delimiter: " << this->delimiter << std::endl;
-  for (auto kv : this->kv_map) {
+  for (const auto &kv : this->kv_map) {
     std::string key = kv.first;
     std::string value = kv.second;
     std::cout << "[" << key << this->delimiter << value << "]" << std::endl;
   }
 }
 
-std::string FileConfigManager::get(std::string key) {
+std::string FileConfigManager::get(const std::string &key) {
   if (this->kv_map.find(key) == this->kv_map.end()) {
     return "";
   }
   return this->kv_map[key];
 }
-std::string FileConfigManager::get(std::string key, std::string default_value) {
+
+std::string FileConfigManager::get(const std::string &key,
+                                   const std::string &default_value) {
   std::string value = this->get(key);
   if (is_not_empty(value)) return value;
   return default_value;
 }
 
-void FileConfigManager::put(std::string key, std::string value) {
+void FileConfigManager::put(const std::string &key, const std::string &value) {
   assert(is_not_empty(key));
   assert(is_not_empty(value));
   this->kv_map[key] = value;
 }
 
-bool FileConfigManager::remove(std::string key) {
+bool FileConfigManager::remove(const std::string &key) {
   if (this->kv_map.find(key) == this->kv_map.end()) return false;
   this->kv_map.erase(key);
   return true;
@@ -148,7 +148,7 @@ bool FileConfigManager::remove(std::string key) {
 
 void FileConfigManager::extract(
     std::unordered_map<std::string, std::string> &map) {
-  for (auto kv : this->kv_map) {
+  for (const auto &kv : this->kv_map) {
     map[kv.first] = kv.second;
   }
 }
