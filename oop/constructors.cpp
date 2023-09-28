@@ -28,6 +28,7 @@ class demo {
 };
 
 int main(int argc, char **argv) {
+  // demo d0;  // no matching constructor
   demo d1("1");
   demo d2("2");
   demo d3("3", 10);
