@@ -9,19 +9,19 @@ enum LogLevel : int {
 
 class Logger {
  private:
-  LogLevel level;
+  LogLevel logLevel;
 
  public:
-  Logger() { this->level = LogLevelInfo; }
-  void setLogLevel(LogLevel level) { this->level = level; }
-  void log(LogLevel level, std::string msg) {
-    if (this->level >= level) {
+  Logger() { this->logLevel = LogLevelInfo; }
+  void setLogLevel(LogLevel level) { this->logLevel = level; }
+  void log(LogLevel level, const std::string &msg) {
+    if (this->logLevel >= level) {
       std::cout << msg << std::endl;
     }
   }
-  void logError(std::string msg) { log(LogLevelError, msg); }
-  void logWarn(std::string msg) { log(LogLevelWarn, msg); }
-  void logInfo(std::string msg) { log(LogLevelInfo, msg); }
+  void logError(const std::string &msg) { log(LogLevelError, msg); }
+  void logWarn(const std::string &msg) { log(LogLevelWarn, msg); }
+  void logInfo(const std::string &msg) { log(LogLevelInfo, msg); }
 };
 
 int main(int argc, char **argv) {
