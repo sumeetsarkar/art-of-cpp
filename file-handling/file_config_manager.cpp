@@ -9,7 +9,7 @@
 
 static std::string ltrim(std::string &s) {
   s.erase(s.begin(), std::find_if(s.begin(), s.end(),
-                                  [&](char c) { return !std::isspace(c); }));
+                                  [](char c) { return !std::isspace(c); }));
   return s;
 }
 
@@ -49,7 +49,7 @@ class FileConfigManager {
   std::string get(std::string key, std::string default_value);
   void put(std::string key, std::string value);
   bool remove(std::string key);
-  std::unordered_map<std::string, std::string> extract();
+  void extract(std::unordered_map<std::string, std::string> &map);
 };
 
 std::string FileConfigManager::get_path() { return this->dir + this->filename; }
@@ -139,6 +139,13 @@ bool FileConfigManager::remove(std::string key) {
   return true;
 }
 
+void FileConfigManager::extract(
+    std::unordered_map<std::string, std::string> &map) {
+  for (auto kv : this->kv_map) {
+    map[kv.first] = kv.second;
+  }
+}
+
 int main(int argc, char **argv) {
   FileConfigManager fcm("./", "local.env");
   bool created_file = fcm.load();
@@ -154,5 +161,9 @@ int main(int argc, char **argv) {
   fcm.remove("testput1");
   created_file = fcm.save();
   std::cout << "Config file created? " << created_file << std::endl;
+
+  std::unordered_map<std::string, std::string> map;
+  fcm.extract(map);
+  std::cout << "config size:" << map.size() << std::endl;
   return EXIT_SUCCESS;
 }
