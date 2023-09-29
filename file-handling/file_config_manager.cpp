@@ -34,9 +34,11 @@ class FileConfigManager {
     this->delimiter = '=';
   }
 
-  FileConfigManager(std::string dir, std::string filename,
+  FileConfigManager(const std::string &dir, const std::string &filename,
                     const char &delimiter)
-      : dir(std::move(dir)), filename(std::move(filename)) {
+      : dir(dir), filename(filename) {
+    assert(is_not_empty(dir));
+    assert(is_not_empty(filename));
     this->delimiter = delimiter;
   }
 
@@ -48,7 +50,7 @@ class FileConfigManager {
   std::string get(const std::string &key, const std::string &default_value);
   void put(const std::string &key, const std::string &value);
   bool remove(const std::string &key);
-  void extract(std::unordered_map<std::string, std::string> &map);
+  std::unordered_map<std::string, std::string> extract();
 };
 
 std::string FileConfigManager::get_path() { return this->dir + this->filename; }
@@ -146,15 +148,16 @@ bool FileConfigManager::remove(const std::string &key) {
   return true;
 }
 
-void FileConfigManager::extract(
-    std::unordered_map<std::string, std::string> &map) {
+std::unordered_map<std::string, std::string> FileConfigManager::extract() {
+  std::unordered_map<std::string, std::string> map;
   for (const auto &kv : this->kv_map) {
     map[kv.first] = kv.second;
   }
+  return map;
 }
 
 int main(int argc, char **argv) {
-  FileConfigManager fcm("./", "local.env");
+  FileConfigManager fcm("./", "local.env", '=');
   bool created_file = fcm.load();
   std::cout << "Config file created? " << created_file << std::endl;
   fcm.dump();
@@ -169,8 +172,7 @@ int main(int argc, char **argv) {
   created_file = fcm.save();
   std::cout << "Config file created? " << created_file << std::endl;
 
-  std::unordered_map<std::string, std::string> map;
-  fcm.extract(map);
+  std::unordered_map<std::string, std::string> map = fcm.extract();
   std::cout << "config size:" << map.size() << std::endl;
   return EXIT_SUCCESS;
 }
