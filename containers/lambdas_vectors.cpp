@@ -7,7 +7,7 @@
 int main(int argc, char **argv) {
   std::vector<int> v1 = {11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21};
 
-  auto even =
+  int even =
       std::count_if(v1.begin(), v1.end(), [](int a) { return a % 2 == 0; });
 
   std::cout << even << std::endl;
