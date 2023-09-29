@@ -12,15 +12,15 @@ class String {
     size_t n = strlen(str);
     size = n + 1;
     buffer = new char[size];
-    std::memcpy(buffer, str, size);
+    std::memcpy(buffer, str, size - 1);
     buffer[size] = 0x00;
     printf("String created: %s\n", buffer);
   }
 
   String(const String &other) {
-    size = other.size + 1;
+    size = other.size;
     buffer = new char[size];
-    std::memcpy(buffer, other.buffer, size);
+    std::memcpy(buffer, other.buffer, size - 1);
     buffer[size] = 0x00;
     printf("String copied: %s\n", buffer);
   }
@@ -35,15 +35,17 @@ class String {
 
   ~String() {
     printf("String destroyed: %s\n", buffer);
+    if (buffer)
+      delete[] buffer;
     size = 0;
-    delete buffer;
   }
 
   friend std::ostream &operator<<(std::ostream &stream, const String &s);
 };
 
 std::ostream &operator<<(std::ostream &stream, const String &s) {
-  stream << s.buffer;
+  if (s.buffer)
+    stream << s.buffer;
   return stream;
 }
 
