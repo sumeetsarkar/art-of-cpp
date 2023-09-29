@@ -2,23 +2,23 @@
 #include <iostream>
 
 // basic pass by value
-std::string get_path1(const std::string dir, const std::string filename) {
-  return dir + filename;
+void set_path1(const std::string dir, const std::string filename) {
+  std::cout << "copy:" << dir + filename << std::endl;
 }
 
 // pass by reference
-std::string get_path2(std::string &dir, std::string &filename) {
-  return dir + filename;
+void set_path2(std::string &dir, std::string &filename) {
+  std::cout << "lvalue:" << dir + filename << std::endl;
 }
 
 // pass by const reference
-std::string get_path3(const std::string &dir, const std::string &filename) {
-  return dir + filename;
+void set_path3(const std::string &dir, const std::string &filename) {
+  std::cout << "lvalue or rvalue:" << dir + filename << std::endl;
 }
 
 // pass rvalue
-std::string get_path4(const std::string &&dir, const std::string &&filename) {
-  return dir + filename;
+void set_path4(const std::string &&dir, const std::string &&filename) {
+  std::cout << "rvalue:" << dir + filename << std::endl;
 }
 
 int get_num1() {
@@ -47,20 +47,20 @@ int main(int argc, char **argv) {
   std::string filename = "hello_world.cpp";
 
   // passing both lvalue and rvalue work (pass by value)
-  get_path1(dir, filename);
-  get_path1("../", "hello.cpp");
+  set_path1(dir, filename);
+  set_path1("../", "hello.cpp");
 
   // Only explicit lvalues can be passed (non-const reference args)
-  get_path2(dir, filename);
-  // get_path2("../", "hello.cpp"); // non-const lvalue, cannot bind to temporary type
+  set_path2(dir, filename);
+  // set_path2("../", "hello.cpp"); // non-const lvalue, cannot bind to temporary type
 
   // passing both lvalue and rvalue work (const reference args)
-  get_path3(dir, filename);
-  get_path3("../", "hello.cpp");
+  set_path3(dir, filename);
+  set_path3("../", "hello.cpp");
 
   // Only explicit rvalues can be passed (const && reference args)
-  // get_path4(dir, filename); // compilation error - expects EXPLICITLY rvalue
-  get_path4("../", "hello.cpp");
+  // set_path4(dir, filename); // compilation error - expects EXPLICITLY rvalue
+  set_path4("../", "hello.cpp");
   // why do we care for passing rvalue directly?
   // Check for move semantics
   return EXIT_SUCCESS;
