@@ -1,5 +1,4 @@
 #include <cstdlib>
-#include <string>
 #include <iostream>
 
 class String {
@@ -25,7 +24,7 @@ class String {
     printf("string copied: %s\n", buffer);
   }
 
-  String (String &&other) noexcept {
+  String(String &&other) noexcept {
     size = other.size;
     buffer = other.buffer;
     other.size = 0;
@@ -47,26 +46,35 @@ class String {
 
   ~String() {
     printf("string destroyed: %s\n", buffer);
-    if (buffer)
-      delete[] buffer;
+    if (buffer) delete[] buffer;
     size = 0;
   }
 
   friend std::ostream &operator<<(std::ostream &stream, const String &s) {
-    if (s.buffer)
-      stream << s.buffer;
+    if (s.buffer) stream << s.buffer;
     return stream;
   }
 };
+
+String get_value_1() {
+  String ret = "return value optimization";
+  return ret;
+}
+
+String get_value_2() {
+  String ret = "will create copy";
+  String &ret2 = ret;
+  return ret2;
+}
 
 int main(int argc, char **argv) {
   {
     // Move
     std::cout << "------------\n";
     String src = "bob";
-    String dest = std::move(src); // Equivalent to
-                                  // String dest = ((String &&)src);
-                                  // i.e., convert the src to rvalue
+    String dest = std::move(src);  // Equivalent to
+                                   // String dest = ((String &&)src);
+                                   // i.e., convert the src to rvalue
     std::cout << "src:" << src << "\n";
     std::cout << "dest:" << dest << "\n";
   }
@@ -100,6 +108,16 @@ int main(int argc, char **argv) {
     String &dest = src;
     std::cout << "src:" << src << "\n";
     std::cout << "dest:" << dest << "\n";
+  }
+  {
+    std::cout << "------------\n";
+    String ret_val = get_value_1();
+    std::cout << ret_val << std::endl;
+  }
+  {
+    std::cout << "------------\n";
+    String ret_val = get_value_2();
+    std::cout << ret_val << std::endl;
   }
   return EXIT_SUCCESS;
 }
