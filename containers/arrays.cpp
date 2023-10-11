@@ -47,7 +47,14 @@ int main(int argc, char **argv) {
   cout << "arr3: " << arr3[0] << ", " << arr3[1] << endl;
   cout << "arr3: " << arr3[9] << endl;
 
-  arr3.at(10);  //  uncaught exception of type out_of_range: array::at
+  // arr3.at(10);  //  uncaught exception of type out_of_range: array::at
+
+  array<int32_t, 6> arr4 = {9, 10, 20, 30, 40, 50};
+  // auto sort_asc = [](int a, int b) -> bool { return a < b; };
+  // sort(arr4.begin(), arr4.end(), sort_asc);
+  sort(arr4.begin(), arr4.end(), [](int a, int b) { return a < b; });
+  for (auto num : arr4) std::cout << num << ",";
+  std::cout << "\n";
 
   return EXIT_SUCCESS;
 }
